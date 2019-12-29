@@ -1,12 +1,13 @@
-var ace = require('brace');
+const { ready, getEl, newEl, getData } = require('@sj-js/crossman');
+const BoxMan = require('@sj-js/boxman');
+const PopMan = require('@sj-js/popman');
+
+const hljs = require('highlight.js');
+const ace = require('brace');
 require('brace/mode/javascript');
 require('brace/theme/monokai');
 
-const hljs = require('highlight.js');
 
-var CrossMan = require('../lib/sj-js/crossman.js');
-var BoxMan = require('../lib/sj-js/boxman.js');
-var PopMan = require('../lib/sj-js/popman.js');
 
 
 
