@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<HTML>
+	<meta charset="utf-8" />	
+	<meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+	<meta name=apple-mobile-web-app-capable content=yes>
+	<meta name=mobile-web-app-capable content=yes>
+	<!-- <meta http-equiv="Content-Type" content="text/html;charset=utf-8" /> -->
+	<meta http-equiv=X-UA-Compatible content="IE=edge, chrome=1">	
+
+    <meta name="homePages" content="<%= htmlWebpackPlugin.options.homePages %>" />
+
+
+	<head>
+		<title><%= htmlWebpackPlugin.options.title %></title>
+	</head>
+
+
+
+
+                              
+	<body style="text-align:center;">
+
+	    <br/><br/><br/>
+        <h1>SJ-DOCS</h1>
+
+	    <div id="navigator" style="text-align:center;">
+	    </div>
+
+	</body>
+
+
+
+	<script>
+        var content = document.getElementsByName('homePages')[0].content;
+        var homePageList = content.split(',');
+        for (var i=0; i<homePageList.length; i++){
+            var homePage = homePageList[i];
+            var navigatorContext = document.getElementById('navigator');
+            var button = document.createElement('button');
+            button.innerHTML = homePage;
+            setupButton(button, homePage);
+            var br = document.createElement('br');
+            navigatorContext.appendChild(button);
+            navigatorContext.appendChild(br);
+        }
+
+        function setupButton(button, url){
+            button.onclick = function(e){ location.href = './' +url+ '/index.html' };
+        }
+    </script>
+
+</HTML>
