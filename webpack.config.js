@@ -1,8 +1,8 @@
-/**************************************************
+/****************************************************************************************************
  *
  *  Webpack
  *
- **************************************************/
+ ****************************************************************************************************/
 const webpack = require('webpack');
 
 /** Plugin **/
@@ -18,31 +18,13 @@ const path = require('path');
 const glob = require("glob");
 const fs = require("fs");
 
-
 /** Path **/
-//SRC
 var SRC_DIR = path.resolve(__dirname, './src');
-//DIST
 var DIST_DIR = path.resolve(__dirname,  './dist');
-
 /** Path - public **/
 var SRC_PUBLIC_DIR = path.resolve(SRC_DIR, './public');
-var SCRIPT_SRC_DIR = SRC_PUBLIC_DIR + '/js';
-var STYLE_SRC_DIR = SRC_PUBLIC_DIR + '/css';
-var IMAGE_SRC_DIR = SRC_PUBLIC_DIR + '/img';
-
-/** Path - lib (TODO: 추후 NPM 패키지로 빼든 하고파) **/
-var CROSSMAN_DIR = path.resolve(__dirname, '../crossman');
-var BOXMAN_DIR = path.resolve(__dirname, '../boxman');
-var POPMAN_DIR = path.resolve(__dirname, '../popman');
-var KEYMAN_DIR = path.resolve(__dirname, '../keyman');
-//SJDocument-Maker
-var boxmanJsList = glob.sync(BOXMAN_DIR+ "/src/**/boxman.js");
-var popmanJsList = glob.sync(POPMAN_DIR+ "/src/**/popman.js");
-var crossmanJsList = glob.sync(CROSSMAN_DIR + "/src/**/crossman.js");
 var thisJsList = glob.sync(SRC_DIR + "/**/*.js");
-var dependencyList = [].concat(crossmanJsList).concat(boxmanJsList).concat(popmanJsList);
-//Temp
+/** Temp **/
 var TEMP_SRC_PATH = path.resolve(__dirname,  './temp/temp_to_full_reload.html');
 
 
@@ -99,21 +81,22 @@ function makeCommonPlugins(sjMarkDown, srcPublicDir, distDir){
 
 
 
-/*************************
+/***************************************************************************
  *
  *  Modules
  *
- *************************/
+ ***************************************************************************/
 module.exports = (env, options) => {
 
+    console.debug('===== env', env);
+    console.debug('===== options', options);
     console.log('==================================================');
-    console.log('===== env', env);
-    console.log('===== options', options);
+    console.log('===== Custom Process');
+    console.log('==================================================');
     var pathToDocs = env.docs;
     var mode = env.mode;
 
     //SjMarkDown //TODO:손봐
-    // var ttta = path.resolve(env.docs);
     var pathListToDocs = glob.sync(pathToDocs);
     pathListToDocs = (pathListToDocs.length > 0) ? pathListToDocs : [pathToDocs];
     var config;
@@ -128,10 +111,13 @@ module.exports = (env, options) => {
     var entries = {};
     var aliasList = [];
 
-    console.error(pathListToDocs.length, pathListToDocs);
+    console.debug(pathListToDocs.length, pathListToDocs);
 
     pathListToDocs.forEach(function(it){
-        console.log("=====", it);
+        console.log("\n\n");
+        console.log("===========================================================================");
+        console.log("=========================", it);
+        console.log("===========================================================================");
         var sjMarkDown = require(it);
         var alias = sjMarkDown.alias;
         aliasList.push(alias);
@@ -152,8 +138,12 @@ module.exports = (env, options) => {
         // commonPlugins.extractTextPlugin = thisCommonPlugins.extractTextPlugin;
         commonPlugins.htmlWebpackPlugin = commonPlugins.htmlWebpackPlugin.concat(thisCommonPlugins.htmlWebpackPlugin);
         // commonPlugins.afterCopyWebpackPlugin = commonPlugins.afterCopyWebpackPlugin.concat(thisCommonPlugins.afterCopyWebpackPlugin);
-        //Entries
-        entries[alias] = dependencyList.concat(thisJsList);
+        //Entry for SJDOC
+        entries[alias] = [].concat(thisJsList);
+        //Entry for Watching file modification //TODO: 그냥 FileWatcher로 처리하는중..
+        // entries['temp'] = (entries['temp']) ? entries['temp'].concat(sjMarkDown.getAllJSPath()) : [];
+        // console.error('##### ##### ###### ######## ################### #################');
+        // console.error(entries['temp']);
     });
 
     //- Make MainPage
@@ -164,7 +154,7 @@ module.exports = (env, options) => {
             template: SRC_PUBLIC_DIR + '/template/index.hsb',
             chunksSortMode: 'manual',
             inject: 'head',  //head or body
-            title: 'Moving to main document',
+            title: '[SJDoc] Index',
             homePages: aliasList.join(','),
             minify: {
                 collapseWhitespace: true,
@@ -173,10 +163,7 @@ module.exports = (env, options) => {
             },
         }),
     );
-
-
-    console.log('checkcehcehk', commonPlugins);
-
+    // console.log('checkcehcehk', commonPlugins);
 
     config = {
         /*************************
@@ -190,14 +177,14 @@ module.exports = (env, options) => {
         resolve: {
             extensions: ['.js', '.jsx'],
             alias:{
-                'this_lib_js': path.resolve(BOXMAN_DIR, './src/js/boxman.js'),
-                'this_lib_css': path.resolve(BOXMAN_DIR, './src/css/boxman.css'),
-
-                'this_help_js': path.resolve(SCRIPT_SRC_DIR, './main.js'),
-                'this_help_css': path.resolve(STYLE_SRC_DIR, './main.css'),
-                'markdown_css': path.resolve(STYLE_SRC_DIR, './markdown.css'),
-                'github_css': path.resolve(STYLE_SRC_DIR, './github.css'),
-
+                // 'this_lib_js': path.resolve(BOXMAN_DIR, './src/js/boxman.js'),
+                // 'this_lib_css': path.resolve(BOXMAN_DIR, './src/css/boxman.css'),
+                //
+                // 'this_help_js': path.resolve(SCRIPT_SRC_DIR, './main.js'),
+                // 'this_help_css': path.resolve(STYLE_SRC_DIR, './main.css'),
+                // 'markdown_css': path.resolve(STYLE_SRC_DIR, './markdown.css'),
+                // 'github_css': path.resolve(STYLE_SRC_DIR, './github.css'),
+                //
                 // 'ace': path.resolve(BOWER_LIB_DIR, 'ace-builds/src-min-noconflict/ace.js'),
             }
         },

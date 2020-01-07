@@ -42,8 +42,11 @@ TesterConverter.prototype.init = function(){
 
     ready(function(){
         that.runHighlight();
-        that.generateHeaderMenu('help-header-menulist');
-        that.generateMenu('help-menu-menulist');
+        var thisLibraryName = that.getLibraryName();
+        that.generateHeaderMenu('help-header-menulist', thisLibraryName);
+        var thisMenuFileName = that.getMdFileName();
+        that.generateMenu('help-menu-menulist', thisMenuFileName);
+
         that.generateEditorAndTester();
         that.resize();
 
@@ -155,15 +158,17 @@ TesterConverter.prototype.getSurfixCode = function(){
 
 //Setup pages hiding data pool
 TesterConverter.prototype.getNameFromTitle = function(){
-    var title = document.getElementsByTagName('title')[0];
-    var helpName = title.innerText;
+    var titleMetaElement = document.getElementsByTagName('title')[0];
+    var helpName = titleMetaElement.innerText;
     return helpName;
 };
 TesterConverter.prototype.getLibraryName = function(){
-    return this.parseMetaContentByName('libraryName');
+    var element = document.getElementsByName('libraryName')[0];
+    return element.content;
 };
 TesterConverter.prototype.getMdFileName = function(){
-    return this.parseMetaContentByName('mdFileName');
+    var element = document.getElementsByName('mdFileName')[0];
+    return element.content;
 };
 TesterConverter.prototype.getHeaderMenuObject = function(){
     return this.parseMetaContentByName('headerMenuJson');
@@ -192,26 +197,28 @@ TesterConverter.prototype.parseMetaContentByName = function(name){
 
 
 
-TesterConverter.prototype.generateHeaderMenu = function(menuContext){
+TesterConverter.prototype.generateHeaderMenu = function(menuContext, selectedMenu){
     var headerMenuObject = this.getHeaderMenuObject();
     for (var libName in headerMenuObject){
         var headerMenu = headerMenuObject[libName];
-        getEl(menuContext).add([
-            newEl('li').add([
-                newEl('a', {href:'../' +libName+ '/README.html'}).html(libName)
-            ])
+        var menuItem = newEl('li').add([
+            newEl('a', {href:'../' +libName+ '/README.html'}).html(libName)
         ]);
+        if (libName == selectedMenu)
+            menuItem.addClass('menu-selected');
+        getEl(menuContext).add(menuItem);
     }
 };
-TesterConverter.prototype.generateMenu = function(menuContext){
+TesterConverter.prototype.generateMenu = function(menuContext, selectedMenuFileName){
     var menuMap = this.getMenuObject(menuContext);
     for (var menuName in menuMap){
         var h1MenuObject = menuMap[menuName];
-        getEl(menuContext).add([
-            newEl('li').add([
-                newEl('a', {href:'../' +h1MenuObject.path}).html(menuName)
-            ])
+        var menuItem = newEl('li').add([
+            newEl('a', {href:'../' +h1MenuObject.path}).html(menuName)
         ]);
+        if (h1MenuObject.fileName == selectedMenuFileName)
+            menuItem.addClass('menu-selected');
+        getEl(menuContext).add(menuItem);
     }
 };
 TesterConverter.prototype.generateEditorAndTester = function(){

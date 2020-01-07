@@ -13,6 +13,11 @@ const { JSDOM } = jsdom;
 function SjMarkdownManager(options){
     this.publicDirRawFilesMap = undefined;
 
+    this.libraryNameAndPublicDirRawFilesMap = undefined;
+    this.libraryNameAndResolvedPublicDirRawFilesPathsMap = undefined;
+    this.publicDirRawFilesFileRange = undefined;
+    this.publicDirRawFilesFilePathList = undefined;
+
     this.libraryNameMarkdownPathsMap = undefined;
     this.libraryNameResolvedMarkdownPathsMap = undefined;
     this.markdownFileRange = undefined;
@@ -69,15 +74,18 @@ SjMarkdownManager.prototype.setDist = function(dist){
 
 SjMarkdownManager.prototype.setLibraryNameAndPublicDirRawFilesMap = function(libraryNameAndPublicDirRawFilesMap){
     this.libraryNameAndPublicDirRawFilesMap = libraryNameAndPublicDirRawFilesMap;
+    this.libraryNameAndResolvedPublicDirRawFilesPathsMap = this.resolveAllPath(libraryNameAndPublicDirRawFilesMap);
+    this.publicDirRawFilesFileRange = this.concatAllValue(libraryNameAndPublicDirRawFilesMap);
+    this.publicDirRawFilesFilePathList = this.concatAllValue(this.libraryNameAndResolvedPublicDirRawFilesPathsMap);
     return this;
 };
 
 SjMarkdownManager.prototype.setLibraryNameAndMarkdownPathsMap = function(libraryNameAndMarkdownPathsMap){
     var that = this;
     this.libraryNameAndMarkdownPathsMap = libraryNameAndMarkdownPathsMap;
-    this.libraryNameResolvedMarkdownPathsMap = this.resolveAllPath(libraryNameAndMarkdownPathsMap);
+    this.libraryNameAndResolvedMarkdownPathsMap = this.resolveAllPath(libraryNameAndMarkdownPathsMap);
     this.markdownFileRange = this.concatAllValue(libraryNameAndMarkdownPathsMap);
-    this.markdownFilePathList = this.concatAllValue(this.libraryNameResolvedMarkdownPathsMap);
+    this.markdownFilePathList = this.concatAllValue(this.libraryNameAndResolvedMarkdownPathsMap);
     // console.log(this.libraryNameMarkdownPathsMap);
     // console.log(this.markdownFileRange);
     // console.log(this.markdownFilePathList);
@@ -146,16 +154,14 @@ SjMarkdownManager.prototype.setDefaultDist = function(defaultDist){
 
 
 
-
-
-
 SjMarkdownManager.prototype.generateDevelopWebpackPluginList = function(TEMP_PATH){
     var resultList = [];
-    var copyWebpackPluginList = this.generateCopyWebpackPluginFromRawFiles(this.libraryNameAndPublicDirRawFilesMap);
-    var htmlWebpackPluginList = this.generateHtmlWebpackPluginFromMarkdownFiles(this.libraryNameResolvedMarkdownPathsMap, this.poolByLibraryName);
+    var copyWebpackPluginList = this.generateCopyWebpackPluginFromRawFiles(this.libraryNameAndResolvedPublicDirRawFilesPathsMap);
+    var htmlWebpackPluginList = this.generateHtmlWebpackPluginFromMarkdownFiles(this.libraryNameAndResolvedMarkdownPathsMap, this.poolByLibraryName);
     resultList = resultList.concat(copyWebpackPluginList).concat(htmlWebpackPluginList);
     if (this.modeDevelopment){
-        var fileWatcherPluginList = this.generateFilewatcherPluginToReloadFully(TEMP_PATH, this.markdownFileRange);
+        var rangePathToWatch = this.markdownFileRange.concat(this.publicDirRawFilesFileRange);
+        var fileWatcherPluginList = this.generateFilewatcherPluginToReloadFully(TEMP_PATH, rangePathToWatch);
         resultList = resultList.concat(fileWatcherPluginList);
     }else{
         if (this.dist){
@@ -207,7 +213,7 @@ SjMarkdownManager.prototype.generateFileCopyAfterBuildPluginList = function(defa
  * Generating HtmlWebpackPlugin
  *************************/
 SjMarkdownManager.prototype.generateHtmlWebpackPluginFromMarkdownFiles = function(libraryNameResolvedMarkdownPathsMap, poolByLibraryName){
-    console.log('\n ========================= Start Generating SJ Markdown');
+    console.log('========================= Start Generating SJ Markdown');
     var that = this;
     // var libraryNameResolvedMarkdownPathsMap = that.libraryNameResolvedMarkdownPathsMap;
 
@@ -321,7 +327,7 @@ SjMarkdownManager.prototype.updateSjMarkdown = function(){
                     var title = childElement.textContent.split('\n')[0];
                     var h1Object = mergeMenuObject[title];
                     if (h1Object){
-                        var publicPathToThisTitle = h1Object['path']
+                        var publicPathToThisTitle = h1Object['path'];
                         var aElement = document.createElement('a');
                         aElement.setAttribute('href', '../' + publicPathToThisTitle);
                         aElement.innerHTML = title;
@@ -597,6 +603,7 @@ SjMarkdownManager.prototype.generateMenuDataFromHtmlH1H2 = function (libName, ma
             }
             result[h1Text] = {
                 path: h1Path,
+                fileName: markdownFileName,
                 h2TextList: h2TextList,
                 h2PathList: h2PathList,
             }

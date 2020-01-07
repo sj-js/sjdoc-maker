@@ -12,6 +12,27 @@
 
 	<head>
 		<title><%= htmlWebpackPlugin.options.title %></title>
+		<style>
+		    #navigator {
+		        display: inline-block;
+		        border: 2px solid #BBBBBB;
+		        border-radius: 5px;
+		    }
+		    #navigator > button {
+		        width: 300px;
+		        height: 50px;
+		        border-radius: 5px;
+		        margin: 2px;
+		        font-size: 16px;
+		        font-weight: bold;
+		        text-align: left;
+                cursor: pointer;
+		    }
+		    #navigator > button:hover {
+                background: #000000;
+                color: #FFFFFF;
+            }
+		</style>
 	</head>
 
 
@@ -45,7 +66,9 @@
         }
 
         function setupButton(button, url){
-            button.onclick = function(e){ location.href = './' +url+ '/index.html' };
+            button.onclick = function(e){
+                location.href = './' +url+ '/index.html'
+            };
         }
     </script>
 
