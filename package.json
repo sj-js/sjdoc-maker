@@ -1,6 +1,6 @@
 {
   "name": "@sj-js/sjdoc-maker",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "author": "souljungkim@gmail.com",
   "license": "MIT",
   "description": "sjdoc-maker",
@@ -16,9 +16,9 @@
     "web": "https://github.com/sj-js/sjdoc-maker"
   },
   "dependencies": {
-    "@sj-js/boxman": "^1.0.3",
-    "@sj-js/crossman": "^1.0.3",
-    "@sj-js/popman": "^1.0.3",
+    "@sj-js/boxman": "^1.0.6",
+    "@sj-js/crossman": "^1.0.5",
+    "@sj-js/popman": "^1.0.6",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",

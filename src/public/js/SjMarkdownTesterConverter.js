@@ -1,7 +1,7 @@
-const { ready, getEl, newEl, getData } = require('@sj-js/crossman');
+const { ready, getEl, newEl, getData  } = require('@sj-js/crossman');
 const BoxMan = require('@sj-js/boxman');
 const PopMan = require('@sj-js/popman');
-
+const ClipboardJS = require('clipboard');
 const hljs = require('highlight.js');
 const ace = require('brace');
 require('brace/mode/javascript');
@@ -42,14 +42,15 @@ TesterConverter.prototype.init = function(){
 
     ready(function(){
         that.runHighlight();
+        //- Header Menu
         var thisLibraryName = that.getLibraryName();
         that.generateHeaderMenu('help-header-menulist', thisLibraryName);
+        //- Side Menu
         var thisMenuFileName = that.getMdFileName();
         that.generateMenu('help-menu-menulist', thisMenuFileName);
-
+        //- Tester(Editor/Runner)
         that.generateEditorAndTester();
         that.resize();
-
         that.boxman = new BoxMan({modeOnlyBoxToBox:true, modeTouch:true});
         that.popman = new PopMan();
         that.popman.new({
@@ -107,13 +108,22 @@ TesterConverter.prototype.makeEditor = function(editorElement, runnerFrame){
  * Apply Code from Editor to Iframe
  *************************/
 TesterConverter.prototype.apply = function(editor, runnerFrame){
-    var contentFromEditor = editor.getValue();
-    var content = this.getPrefixCode() + contentFromEditor + this.getSurfixCode();
+    var content = this.getTextFromEditorWithPrefixAndSurfix(editor);
     // runnerFrame.contentWindow.document.open('text/htmlreplace');
     runnerFrame.contentWindow.document.open();
     runnerFrame.contentWindow.document.write(content);
     runnerFrame.contentWindow.document.close();
 };
+
+TesterConverter.prototype.getTextFromEditorWithPrefixAndSurfix = function(editor){
+    return this.getPrefixCode() + this.getTextFromEditor(editor) + this.getSurfixCode();
+};
+
+TesterConverter.prototype.getTextFromEditor = function(editor){
+    return editor.getValue();
+};
+
+
 
 /*************************
  * Highlight
@@ -202,7 +212,7 @@ TesterConverter.prototype.generateHeaderMenu = function(menuContext, selectedMen
     for (var libName in headerMenuObject){
         var headerMenu = headerMenuObject[libName];
         var menuItem = newEl('li').add([
-            newEl('a', {href:'../' +libName+ '/README.html'}).html(libName)
+            newEl('a', {href:'../' +libName+ '/index.html'}).html(libName)
         ]);
         if (libName == selectedMenu)
             menuItem.addClass('menu-selected');
@@ -222,19 +232,120 @@ TesterConverter.prototype.generateMenu = function(menuContext, selectedMenuFileN
     }
 };
 TesterConverter.prototype.generateEditorAndTester = function(){
+    /** Code as Tester **/
     var codeDivs = document.querySelectorAll('div.lang-js, div.lang-html');
-    for (var i=0, coderDiv; i<codeDivs.length; i++){
-        coderDiv = codeDivs[i];
+    var seqId = 0;
+    for (var i=0, codeDiv; i<codeDivs.length; i++){
+        codeDiv = codeDivs[i];
+        /** Make Runner (iframe) **/
         var runnerFrame = newEl('iframe');
         /** Re-placing **/
-        newEl('div').addClass('tester').appendToFrontOf(coderDiv).add([
-            getEl(coderDiv).addClass('editor'),
+        var tester = newEl('div').addClass('tester').appendToFrontOf(codeDiv).add([
+            getEl(codeDiv).addClass('editor'),
             newEl('div').addClass('runner').add([
                 runnerFrame
             ])
         ]);
-        /** Make Tester **/
-        var editor = this.makeEditor(coderDiv, runnerFrame.returnElement());
+        //- Make Tester
+        var editor = this.makeEditor(codeDiv, runnerFrame.returnElement());
         this.apply(editor, runnerFrame.returnElement());
+        //- Make Tool
+        this.makeTool( ('tool-btn-copy-'+(++seqId)), editor, codeDiv );
     }
+
+    /** Code others ... **/
+    var preElements = document.querySelectorAll('pre');
+    for (var j=0; j<preElements.length; j++){
+        var preElement = preElements[j];
+        var maybeCodeElement = preElement.children[0];
+        if (maybeCodeElement.tagName.toLowerCase() == 'code'){
+            getEl(preElement).setStyle('position', 'relative');
+            //- Make Tool
+            this.makeTool( ('tool-btn-copy-'+(++seqId)), null, preElement );
+        }
+    }
+
+};
+
+TesterConverter.prototype.makeTool = function(targetElementId, editor, codeContextElement){
+    var that = this;
+    if (!codeContextElement.extendsPanel){
+        //Make Button
+        //- Button - Copy
+        var imagePathForButtonCopy = require('../image/icon-copy.png');
+        var buttonCopy = newEl('button').html('').addClass(['icon', 'icon-code-extends', 'icon-copy']);
+        buttonCopy.setStyle('background-image', 'url(' +imagePathForButtonCopy+ ')');
+        //- Button - Pop
+        var buttonPop = newEl('button').html('').addClass(['icon', 'icon-code-extends']).addEventListener('click', function(e){
+            that.popman.popTemp({
+                exp:'50%',
+                add: function(data){
+                    getEl(data.element).style('background:white;').add( getEl(codeContextElement).clone(true) );
+                }
+            });
+        });
+        //Make Panel
+        var extendsPanel = codeContextElement.extendsPanel = newEl('div')
+            .attr('id', targetElementId)
+            .style('position:absolute; display:none; z-index:1000; text-align:right; width:100%; height:1px;')
+            .add([
+                buttonCopy,
+                // buttonPop
+            ])
+            .appendToAsFirst(codeContextElement)
+            .returnElement();
+        //Event
+        codeContextElement.addEventListener('mousemove', function(e){
+            if (extendsPanel.style.display != 'block')
+                extendsPanel.style.display = 'block';
+            that.statusMouseover = true;
+        });
+        codeContextElement.addEventListener('mouseout', function(e){
+            extendsPanel.style.display = 'none';
+            that.statusMouseover = false;
+        });
+        buttonCopy.addEventListener("mouseleave", function(e){
+            buttonCopy.removeClass(['tooltipped', 'tooltipped-s']);
+            buttonCopy.attr('aria-label', null);
+        });
+
+        var clipboard = null;
+        if (editor){
+            clipboard = new ClipboardJS(('#'+targetElementId), {
+                text: function(trigger){
+                    return that.getTextFromEditorWithPrefixAndSurfix(editor);
+                }
+            });
+        }else{
+            clipboard = new ClipboardJS(('#'+targetElementId), {
+                text: function(trigger){
+                    return codeContextElement.childNodes[1].textContent;
+                }
+            });
+        }
+        clipboard.on('success', function(e){
+            // e.clearSelection();
+            TesterConverter.showTooltip(buttonCopy.returnElement(),'Copied!');
+        });
+        clipboard.on('error', function(e){
+            TesterConverter.showTooltip(buttonCopy.returnElement(), TesterConverter.fallbackMessage(e.action));
+        });
+    }
+};
+
+TesterConverter.showTooltip = function(elem, msg){
+    getEl(elem).addClass(['tooltipped', 'tooltipped-s']).attr('aria-label', msg);
+};
+
+TesterConverter.fallbackMessage = function(action){
+    var actionMsg = '';
+    var actionKey = (action === 'cut' ? 'X' : 'C');
+    if (/iPhone|iPad/i.test(navigator.userAgent)){
+        actionMsg = 'No support :(';
+    }else if (/Mac/i.test(navigator.userAgent)){
+        actionMsg = 'Press ⌘-'+ actionKey+' to '+ action;
+    }else{
+        actionMsg = 'Press Ctrl-'+ actionKey+' to '+ action;
+    }
+    return actionMsg;
 };

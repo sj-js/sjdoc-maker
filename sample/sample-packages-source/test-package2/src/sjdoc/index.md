@@ -1,22 +1,19 @@
 # Test2
+## 📄
+[![Build Status](https://travis-ci.org/sj-js/boxman.svg?branch=master)](https://travis-ci.org/sj-js/boxman)
+[![All Download](https://img.shields.io/github/downloads/sj-js/boxman/total.svg)](https://github.com/sj-js/boxman/releases)
+[![Release](https://img.shields.io/github/release/sj-js/boxman.svg)](https://github.com/sj-js/boxman/releases)
+[![License](https://img.shields.io/github/license/sj-js/boxman.svg)](https://github.com/sj-js/boxman/releases)
 - It just test.. Change yours~
-
-    [![Build Status](https://travis-ci.org/sj-js/boxman.svg?branch=master)](https://travis-ci.org/sj-js/boxman)
-    [![All Download](https://img.shields.io/github/downloads/sj-js/boxman/total.svg)](https://github.com/sj-js/boxman/releases)
-    [![Release](https://img.shields.io/github/release/sj-js/boxman.svg)](https://github.com/sj-js/boxman/releases)
-    [![License](https://img.shields.io/github/license/sj-js/boxman.svg)](https://github.com/sj-js/boxman/releases)
-    
-    (https://github.com/sj-js/boxman)
-
-    
+- https://github.com/sj-js/boxman
 
 
         
-## 0. Index
+## Index
 *@* **order** *@*
 ```
 - Test2
-- Examples
+- Example
 ```
 
 
@@ -27,7 +24,7 @@
 
 1. 스크립트 불러오기
     ```html    
-    <script src="https://cdn.jsdelivr.net/gh/sj-js/test/something/test2.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@sj-js/test/something/test2.js"></script>
     <script>
          var test2 = new Test2();
     </script>

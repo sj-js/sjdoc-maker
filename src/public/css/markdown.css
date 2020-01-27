@@ -92,8 +92,11 @@
   border-radius: 3px;
   word-wrap: break-word;
   border: 1px solid #cccccc;
-  overflow: auto;
-  padding: .5em;
+  /*overflow: auto;*/ //TODO: it will be deleted to show 'Copied' hanging message
+  /*padding: .5em;*/
+}
+.markdown pre:hover {
+  border: 1px solid deeppink;
 }
 .markdown pre code {
   border: 0;

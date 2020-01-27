@@ -1,4 +1,4 @@
-# Examples
+# Example
 로딩이 필요할때 사용합니다. 
 
 *@* *+prefix* *x* *@* 

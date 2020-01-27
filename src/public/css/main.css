@@ -40,6 +40,7 @@ ul.menu-type-b  {
 	display: inline-block;
 	width: 100%; height: 40px;
 	text-align:center;
+	border-radius: 10px;
 }
 .menu-type-b a {
 	display: block;
@@ -66,6 +67,7 @@ ul.menu-type-b  {
 	/*display:inline-block;*/
 	/*width: 200px; height: 100px;*/
 	border:1px solid black; margin: 0px; padding: 0px;
+	border-radius: 15px;
 	overflow:auto;
 	flex:0 0 100px;
 	/*order:1; align-self: auto;*/
@@ -152,10 +154,97 @@ div[data-pop], .sj-popman-obj-container {
 	overflow-x: hidden;
 }
 
+.icon {
+	cursor:pointer;
+}
+.icon-code-extends {
+	width: 40px;
+	height: 45px;
+	border-radius: 12px;
+	margin: 2px;
+}
+.icon-code-extends:hover {
+	opacity: .7;
+}
+.icon-copy {
+	/* It was defined by js source code */
+	/*
+		background-image: url("../image/icon-copy.png");
+	*/
+	background-size: 100% 100%;
+}
+
+
+
+/***************************************************************************
+*
+* Tooltip
+*
+***************************************************************************/
+.tooltipped {
+	position: relative
+}
+
+.tooltipped:after {
+	position: absolute; z-index: 1000000; display: none; padding: 5px 8px; font: normal normal 11px/1.5 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; color: #fff; text-align: center; text-decoration: none; text-shadow: none; text-transform: none; letter-spacing: normal; word-wrap: break-word; white-space: pre; pointer-events: none; content: attr(aria-label); background: rgba(0, 0, 0, 0.8); border-radius: 3px; -webkit-font-smoothing: subpixel-antialiased
+}
+
+.tooltipped:before {
+	position: absolute; z-index: 1000001; display: none; width: 0; height: 0; color: rgba(0, 0, 0, 0.8); pointer-events: none; content: ""; border: 5px solid transparent;
+}
+
+.tooltipped:hover:before, .tooltipped:hover:after, .tooltipped:active:before, .tooltipped:active:after, .tooltipped:focus:before, .tooltipped:focus:after {
+	display: inline-block; text-decoration: none;
+}
+
+.tooltipped-s:after, .tooltipped-se:after, .tooltipped-sw:after {
+	top: 100%; right: 50%; margin-top: 5px;
+}
+
+.tooltipped-s:before, .tooltipped-se:before, .tooltipped-sw:before {
+	top: auto; right: 50%; bottom: -5px; margin-right: -5px; border-bottom-color: rgba(0, 0, 0, 0.8);
+}
+
+.tooltipped-s:after, .tooltipped-n:after {
+	-webkit-transform: translateX(50%); -ms-transform: translateX(50%); transform: translateX(50%);
+}
 
 
 
 
+
+/***************************************************************************
+ * SCROLLBAR
+ ***************************************************************************/
+/* width */
+::-webkit-scrollbar {
+	width: 16px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 5px grey;
+	border-radius: 10px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #a1e2d6;
+	border-radius: 10px;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #71d9da;
+}
+
+
+
+
+
+
+/***************************************************************************
+*
+* MediaQuery
+*
+***************************************************************************/
 @media (min-width: 100px) and (max-width: 1279px) {
 	.tester {
 		display: block;

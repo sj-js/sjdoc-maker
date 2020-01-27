@@ -17,7 +17,7 @@
 
 
 	<head>
-		<title><%= htmlWebpackPlugin.options.title %></title>
+		<title><%= htmlWebpackPlugin.options.libraryName %> - <%= htmlWebpackPlugin.options.title %></title>
 
 		<!-- ★highlight.js -->
 		<!--

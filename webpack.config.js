@@ -215,7 +215,19 @@ module.exports = (env, options) => {
                 /** hsb **/
                 { test: /\.hbs$/, loader: "handlebars-loader" },
                 /** images **/
-                { test:  /\.(ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader' },
+                {
+                    test: /\.(png|jp(e*)g)$/,
+                    loader: "file-loader"
+                },
+                // { test:  /\.(ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader' },
+                // {
+                //     test: /\.(png|jp(e*)g)$/,
+                //     loader: 'url-loader',
+                //     options: {
+                //         limit: 10 * 1024,
+                //         name: 'images/[hash]-[name].[ext]'
+                //     }
+                // },
                 /** Markdown **/
                 { test: /\.md$/, loader: ['html-loader', 'markdown-loader'] },
                 /** font **/

@@ -1,21 +1,20 @@
 # Test1
+[![Build Status](https://travis-ci.org/sj-js/popman.svg?branch=master)](https://travis-ci.org/sj-js/popman)
+[![All Download](https://img.shields.io/github/downloads/sj-js/popman/total.svg)](https://github.com/sj-js/popman/releases)
+[![Release](https://img.shields.io/github/release/sj-js/popman.svg)](https://github.com/sj-js/popman/releases)
+[![License](https://img.shields.io/github/license/sj-js/popman.svg)](https://github.com/sj-js/popman/releases)
+    
 - It just test.. Change yours~
-
-    [![Build Status](https://travis-ci.org/sj-js/popman.svg?branch=master)](https://travis-ci.org/sj-js/popman)
-    [![All Download](https://img.shields.io/github/downloads/sj-js/popman/total.svg)](https://github.com/sj-js/popman/releases)
-    [![Release](https://img.shields.io/github/release/sj-js/popman.svg)](https://github.com/sj-js/popman/releases)
-    [![License](https://img.shields.io/github/license/sj-js/popman.svg)](https://github.com/sj-js/popman/releases)
-    
-    https://github.com/sj-js/popman
+- https://github.com/sj-js/popman
 
     
 
-## 0. Index
+## Index
 *@* **order** *@*
 ```
 - Test1
 - Functions
-- Examples
+- Example
 ```
 
 
@@ -26,7 +25,7 @@
 
 1. 스크립트 불러오기
     ```html    
-    <script src="https://cdn.jsdelivr.net/gh/sj-js/test/something/test1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@sj-js/test/something/test1.js"></script>
     <script>
          var test1 = new Test1();
     </script>
