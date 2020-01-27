@@ -71,7 +71,7 @@
 
 			<!-- Menu -->
 			<div id="help-menu" class="help-menu">
-			    <div id="help-menu-context" style="width:100%; height:100%; background:#ffffff; overflow:hidden;">
+			    <div id="help-menu-context" style="width:100%; height:100%; background:#ffffff; overflow:auto;">
                     <ul id="help-menu-menulist" class="menu-type-b test" >
                     </ul>
 			    </div>

@@ -50,6 +50,12 @@ function makeCommonPlugins(sjMarkDown, srcPublicDir, distDir){
                     to: path.resolve(distDir, './css'),
                 }
             ]),
+            new CopyWebpackPlugin([
+                {
+                    from: path.resolve(srcPublicDir, './image'),
+                    to: path.resolve(distDir, './image'),
+                }
+            ]),
         ],
         extractTextPlugin:[
             // new ExtractTextPlugin({

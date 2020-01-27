@@ -167,10 +167,7 @@ div[data-pop], .sj-popman-obj-container {
 	opacity: .7;
 }
 .icon-copy {
-	/* It was defined by js source code */
-	/*
-		background-image: url("../image/icon-copy.png");
-	*/
+	background-image: url("../image/icon-copy.png");
 	background-size: 100% 100%;
 }
 

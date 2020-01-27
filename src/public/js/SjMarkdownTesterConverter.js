@@ -272,9 +272,9 @@ TesterConverter.prototype.makeTool = function(targetElementId, editor, codeConte
     if (!codeContextElement.extendsPanel){
         //Make Button
         //- Button - Copy
-        var imagePathForButtonCopy = require('../image/icon-copy.png');
         var buttonCopy = newEl('button').html('').addClass(['icon', 'icon-code-extends', 'icon-copy']);
-        buttonCopy.setStyle('background-image', 'url(' +imagePathForButtonCopy+ ')');
+        // var imagePathForButtonCopy = require('../image/icon-copy.png');
+        // buttonCopy.setStyle('background-image', 'url(' +imagePathForButtonCopy+ ')');
         //- Button - Pop
         var buttonPop = newEl('button').html('').addClass(['icon', 'icon-code-extends']).addEventListener('click', function(e){
             that.popman.popTemp({
