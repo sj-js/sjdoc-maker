@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "@sj-js/crossman": "^1.0.7",
-    "@sj-js/boxman": "^1.0.7",
-    "@sj-js/popman": "^1.0.7",
+    "@sj-js/boxman": "^1.0.10",
+    "@sj-js/popman": "^1.0.8",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",

@@ -104,7 +104,9 @@ ul.menu-type-b  {
 	/*order:1; align-self: auto;*/
 }
 
-
+.sj-popman-obj-container{
+	border-radius:10px;
+}
 
 .tester {
 	display: flex;
