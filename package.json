@@ -49,7 +49,7 @@
     "jshint": "^2.9.3",
     "markdown-html-webpack-plugin": "^1.0.1",
     "markdown-loader": "^2.0.2",
-    "marked": "^0.3.6",
+    "marked": "^4.0.10",
     "node-sass": "^4.7.2",
     "postcss-loader": "^2.1.0",
     "raw-loader": "^0.5.1",
